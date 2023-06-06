@@ -20,6 +20,12 @@ function Form({ cancelNewPassword }: FormProps) {
     }));
   };
 
+  const valid = 'valid-password-check';
+  const invalid = 'invalid-password-check';
+
+  const withLettersAndNumbers = /^(?=.*[a-zA-Z])(?=.*\d).+$/;
+  const withSpecialCharacter = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*]).+$/img;
+
   const passwordValidator = () => {
     const passwordWithLetterNumberAndAtLeastOneSpecial = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).*$/;
     if (passwordWithLetterNumberAndAtLeastOneSpecial.test(data.password)
@@ -84,6 +90,35 @@ function Form({ cancelNewPassword }: FormProps) {
       >
         Cancelar
       </button>
+      <p
+        className={ data.password.length >= 8
+          ? valid
+          : invalid }
+      >
+        Possuir 8 ou mais caracteres
+      </p>
+      <p
+        className={ data.password.length <= 16
+          ? valid
+          : invalid }
+      >
+        Possuir até 16 caracteres
+      </p>
+      <p
+        className={ withLettersAndNumbers.test(data.password)
+          ? valid
+          : invalid }
+      >
+        Possuir letras e números
+
+      </p>
+      <p
+        className={ withSpecialCharacter.test(data.password)
+          ? valid
+          : invalid }
+      >
+        Possuir algum caractere especial
+      </p>
     </form>
   );
 }
