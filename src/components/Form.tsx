@@ -5,25 +5,38 @@ type FormProps = {
 };
 
 function Form({ cancelNewPassword }: FormProps) {
-  const [passwordValid, setPasswordValid] = useState(false);
-  const [serviceName, setServiceName] = useState('');
-  const [login, setLogin] = useState('');
+  const [data, setData] = useState({
+    serviceName: '',
+    login: '',
+    password: '',
+    passwordValid: false,
+  });
 
-  const handleName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setServiceName(event.target.value);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  const handleLogin = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLogin(event.target.value);
-  };
-
-  const passwordValidator = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const passwordWithLetterNumberAndAtLeastOneSpecial = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,16}$/;
-    if (passwordWithLetterNumberAndAtLeastOneSpecial.test(event.target.value)
-      && serviceName.length >= 1
-      && login.length >= 1
+  const passwordValidator = () => {
+    const passwordWithLetterNumberAndAtLeastOneSpecial = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).*$/;
+    if (passwordWithLetterNumberAndAtLeastOneSpecial.test(data.password)
+    && data.password.length >= 8
+      && data.password.length <= 16
+      && data.serviceName.length >= 1
+      && data.login.length >= 1
     ) {
-      setPasswordValid(true);
+      setData((prevData) => ({
+        ...prevData,
+        passwordValid: true,
+      }));
+    } else {
+      setData((prevData) => ({
+        ...prevData,
+        passwordValid: false,
+      }));
     }
   };
 
@@ -33,30 +46,35 @@ function Form({ cancelNewPassword }: FormProps) {
       <input
         type="text"
         id="serviceName"
-        value={ serviceName }
-        onChange={ (event) => handleName(event) }
+        name="serviceName"
+        value={ data.serviceName }
+        onChange={ (event) => handleChange(event) }
       />
       <label htmlFor="Login">Login</label>
       <input
         type="text"
         id="Login"
-        value={ login }
-        onChange={ (event) => handleLogin(event) }
+        name="login"
+        value={ data.login }
+        onChange={ (event) => handleChange(event) }
       />
       <label htmlFor="password">Senha</label>
       <input
         type="password"
         id="password"
-        minLength={ 8 }
-        maxLength={ 16 }
-        onChange={ (event) => passwordValidator(event) }
+        name="password"
+        value={ data.password }
+        onChange={ (event) => {
+          handleChange(event);
+          passwordValidator();
+        } }
       />
       <label htmlFor="URL">URL</label>
       <input type="text" id="URL" />
       <button
         id="Cadastrar"
         onClick={ cancelNewPassword }
-        disabled={ !passwordValid }
+        disabled={ !data.passwordValid }
       >
         Cadastrar
       </button>
