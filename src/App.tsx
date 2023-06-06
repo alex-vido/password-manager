@@ -19,10 +19,12 @@ function App() {
       {
         newPassword
           ? <Form cancelNewPassword={ cancelNewPassword } />
-          : <button id="newPassword" onClick={ formNewPassword }>
-            Cadastrar nova senha
+          : (
+            <button id="newPassword" onClick={ formNewPassword }>
+              Cadastrar nova senha
             </button>
-      }
+          )
+}
     </div>
   );
 }
