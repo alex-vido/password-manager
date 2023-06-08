@@ -1,7 +1,16 @@
+body {
+  background-color: rgba(39, 42, 55, 1);
+}
+
 .valid-password-check {
   color: #aeffb6;
 }
 
 .invalid-password-check {
   color: #f58989;
+}
+
+.hidePasswordLabel:hover {
+  color: rgb(20, 105, 67) !important;
+  cursor: pointer;
 }
