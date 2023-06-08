@@ -6,6 +6,7 @@ import { PasswordTypeWithId } from './types';
 function App() {
   const [registerPassword, setRegisterPassword] = useState(false);
   const [passwords, setPasswords] = useState<Array<PasswordTypeWithId>>([]);
+  const [hidePassword, setHidePassword] = useState(false);
 
   const formNewPassword = () => {
     setRegisterPassword(true);
@@ -23,6 +24,14 @@ function App() {
   const handleDelete = (id: number) => {
     const passwordsWithoutDeleted = passwords.filter((password) => password.id !== id);
     setPasswords(passwordsWithoutDeleted);
+  };
+
+  const handleHidePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.checked) {
+      setHidePassword(event.target.checked);
+    } else {
+      setHidePassword(false);
+    }
   };
 
   return (
@@ -44,8 +53,9 @@ function App() {
         passwords.length === 0 ? (
           <h2>Nenhuma senha cadastrada</h2>
         ) : (
-          <ul>
-            {
+          <div>
+            <ul>
+              {
               passwords.map((password) => (
                 <li key={ password.id }>
                   <a href={ password.URL }>{ password.serviceName }</a>
@@ -53,21 +63,34 @@ function App() {
                     <span>Login </span>
                     <span>{ password.login }</span>
                   </p>
+                  <span>Senha </span>
+
                   <p>
-                    <span>Senha </span>
-                    <span>{ password.password }</span>
+                    { hidePassword
+                      ? '******'
+                      : password.password}
+
                   </p>
+
                   <button
                     data-testid="remove-btn"
                     onClick={ () => handleDelete(password.id) }
                   >
                     X
-
                   </button>
                 </li>
               ))
             }
-          </ul>
+            </ul>
+            <label htmlFor="hidePassword">Esconder senhas</label>
+            <input
+              type="checkbox"
+              checked={ hidePassword }
+              onChange={ (event) => handleHidePassword(event) }
+              name="hidePassword"
+              id="hidePassword"
+            />
+          </div>
         )
       }
     </div>
