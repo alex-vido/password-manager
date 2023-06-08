@@ -6,4 +6,4 @@ export type PasswordType = {
   URL?: string;
 };
 
-export type PasswordTypeWithId = PasswordType & { id: string | number };
+export type PasswordTypeWithId = PasswordType & { id: number };
