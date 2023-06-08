@@ -1,16 +1,27 @@
 import { useState } from 'react';
+import { PasswordType, PasswordTypeWithId } from '../types';
 
 type FormProps = {
-  cancelNewPassword: () => void
+  cancelNewPassword: () => void;
+  handleNewPassword: (newPassword: PasswordTypeWithId) => void;
 };
 
-function Form({ cancelNewPassword }: FormProps) {
-  const [data, setData] = useState({
-    serviceName: '',
-    login: '',
-    password: '',
-    passwordValid: false,
-  });
+const INITIAL_STATE: PasswordType = {
+  serviceName: '',
+  login: '',
+  password: '',
+  passwordValid: false,
+  URL: '',
+};
+
+function Form({ cancelNewPassword, handleNewPassword }: FormProps) {
+  const [data, setData] = useState(INITIAL_STATE);
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    const newPasssword = { ...data, id: Date.now() };
+    handleNewPassword(newPasssword);
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -38,6 +49,7 @@ function Form({ cancelNewPassword }: FormProps) {
         ...prevData,
         passwordValid: true,
       }));
+      // handleSubmit(data);
     } else {
       setData((prevData) => ({
         ...prevData,
@@ -47,7 +59,7 @@ function Form({ cancelNewPassword }: FormProps) {
   };
 
   return (
-    <form>
+    <form onSubmit={ handleSubmit }>
       <label htmlFor="serviceName">Nome do serviço</label>
       <input
         type="text"
@@ -76,10 +88,17 @@ function Form({ cancelNewPassword }: FormProps) {
         } }
       />
       <label htmlFor="URL">URL</label>
-      <input type="text" id="URL" />
+      <input
+        type="text"
+        id="URL"
+        name="URL"
+        value={ data.URL }
+        onChange={ (event) => {
+          handleChange(event);
+        } }
+      />
       <button
         id="Cadastrar"
-        onClick={ cancelNewPassword }
         disabled={ !data.passwordValid }
       >
         Cadastrar

@@ -1,30 +1,62 @@
 import { useState } from 'react';
 import './App.css';
 import Form from './components/Form';
+import { PasswordTypeWithId } from './types';
 
 function App() {
-  const [newPassword, setNewPassword] = useState(false);
+  const [registerPassword, setRegisterPassword] = useState(false);
+  const [passwords, setPasswords] = useState<Array<PasswordTypeWithId>>([]);
 
   const formNewPassword = () => {
-    setNewPassword(true);
+    setRegisterPassword(true);
   };
 
   const cancelNewPassword = () => {
-    setNewPassword(false);
+    setRegisterPassword(false);
+  };
+
+  const handleNewPassword = (newPassword: PasswordTypeWithId) => {
+    setPasswords((prevPasswords) => [...prevPasswords, newPassword]);
+    setRegisterPassword(false);
   };
 
   return (
     <div>
       <h1>Gerenciador de senhas</h1>
       {
-        newPassword
-          ? <Form cancelNewPassword={ cancelNewPassword } />
+        registerPassword
+          ? <Form
+              cancelNewPassword={ cancelNewPassword }
+              handleNewPassword={ handleNewPassword }
+          />
           : (
-            <button id="newPassword" onClick={ formNewPassword }>
+            <button id="registerPassword" onClick={ formNewPassword }>
               Cadastrar nova senha
             </button>
           )
-}
+      }
+      {
+        passwords.length === 0 ? (
+          <h2>Nenhuma senha cadastrada</h2>
+        ) : (
+          <ul>
+            {passwords.map((password) => (
+              <li key={ password.id }>
+                <a href={ password.URL }>{ password.serviceName }</a>
+                <p>
+                  <span>Login </span>
+                  <span>{ password.login }</span>
+                </p>
+                <p>
+                  <span>Senha </span>
+                  <span>{ password.password }</span>
+                </p>
+                <span>X</span>
+              </li>
+            ))}
+          </ul>
+        )
+      }
     </div>
   );
 }
