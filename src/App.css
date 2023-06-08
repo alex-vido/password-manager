@@ -11,6 +11,6 @@ body {
 }
 
 .hidePasswordLabel:hover {
-  color: rgb(20, 105, 67) !important;
+  color: rgb(20, 105, 67);
   cursor: pointer;
 }
